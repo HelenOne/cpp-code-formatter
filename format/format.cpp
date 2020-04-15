@@ -4,19 +4,23 @@
 int format(char filename[], char filenameToSave[])
 {
 
+  // создание потока для чтения файла и открытие файла для дальнейшего форматирования
   std::ifstream readFile;
   readFile.open(filename);
   if (!readFile.is_open())
   {
-    std::cout << "Error with opening! \n";
+    std::cout << "Error with opening ("
+              << filename
+              << ")! \n";
     return 0;
   }
 
-  char currentRowInReadFile[256];
+  char currentRowInReadFile[256]; // для получения отдельных строк из исходного файла
 
-  char codeHandlingArray[100]; //Сделать динамическим! //Сюда записываю код, чтобы обработать и записать в новый файл
+  char codeHandlingArray[100]; //Сделать динамическим! //Сюда записываю код, чтобы обработать и записать отформатированный код в новый файл
   int codeHandlingArrayChar = 0;
 
+  // цикл для записи исходного кода в массив символов, дальнейшей обработки массива и записи более красивого кода в новый файл
   while (!readFile.eof())
   {
     readFile.getline(currentRowInReadFile, 256, '\0');
@@ -33,30 +37,24 @@ int format(char filename[], char filenameToSave[])
 
     std::cout << std::endl;
     readFile.close();
+
     std::ofstream writeFile;
+    writeFile.open(filenameToSave);
 
-    if (filenameToSave[0] == '\0')
-    {
-      writeFile.open(filename);
-    }
-    else
-    {
-      writeFile.open(filenameToSave);
-    }
-
-    // далее работа с записью в файл и обработка массива
+    // далее идет обработка массива с исходным кодом по правилам форматтирования кода
 
     int nestingLevel = 0; //Уровень вложенности
     char previousChar = '\0';
     for (int i = 0; i < codeHandlingArrayChar; i++)
     {
-      bool rowHasIndent = false;
+      bool rowHasIndent = false; // переменная для проверки наличия отступов в каждой строке
 
-      if ((nestingLevel != 0) && (rowHasIndent) && (previousChar == '\n') && (codeHandlingArray[i] != '}'))
+      if ((nestingLevel != 0) && (!rowHasIndent) && (previousChar == '\n') && (codeHandlingArray[i] != '}'))
       {
         for (int i = 0; i < nestingLevel; i++)
         {
           writeFile << '\t';
+          previousChar = '\t';
         }
         rowHasIndent = true;
       }
@@ -82,10 +80,29 @@ int format(char filename[], char filenameToSave[])
         previousChar = '\n';
         nestingLevel--;
       }
-      else if (((previousChar == ' ') && (codeHandlingArray[i] == ' ')) || ((previousChar == '\n') && (codeHandlingArray[i] == '\n')) || ((previousChar == '\n') && (codeHandlingArray[i] == '}')) || ((codeHandlingArray[i] == '\t')))
+      // Далее идут уословия при которых символ не записывается в новый файл, то есть игнорируются
+      else if ((previousChar == ' ') && (codeHandlingArray[i] == ' ')) //удаление лишних пробелов
       {
         // do nothing
       }
+      else if ((codeHandlingArray[i] == '\t')) //Удаление всех оттупов, которые были в изначальном файле
+      {
+        // do nothing
+      }
+      else if ((previousChar == '\n') && (codeHandlingArray[i] == '}')) //Удаление пустой строки перед закрывающей скобкой
+      {
+        // do nothing
+      }
+      else if ((previousChar == '\n') && (codeHandlingArray[i] == '\n')) //Удаление повторяющихся переносов строки
+      {
+        // do nothing
+      }
+      else if ((previousChar == '\t') && ((codeHandlingArray[i] == ' '))) //Удаление лишних пробелов
+      {
+        //do nothing
+      }
+
+      //все остальные символы (просто записываются):
       else
       {
         writeFile << codeHandlingArray[i];
@@ -93,10 +110,10 @@ int format(char filename[], char filenameToSave[])
       }
     }
   }
-  std::cout << std::endl
-            << "File \""
-            << filename
-            << "\" is succesfully formatted!"
-            << std::endl;
+  // std::cout << std::endl
+  //           << "File \""
+  //           << filename
+  //           << "\" is succesfully formatted!"
+  //           << std::endl;
   return 0;
 }
