@@ -16,8 +16,11 @@ int format(char filename[], char filenameToSave[])
   }
 
   char currentRowInReadFile[256]; // для получения отдельных строк из исходного файла
+  //Сделать динамическим!
 
-  char codeHandlingArray[100]; //Сделать динамическим! //Сюда записываю код, чтобы обработать и записать отформатированный код в новый файл
+  //Сделать динамическим!
+  char codeHandlingArray[100];
+  //Сюда записываю код, чтобы обработать и записать отформатированный код в новый файл
   int codeHandlingArrayChar = 0;
 
   // цикл для записи исходного кода в массив символов, дальнейшей обработки массива и записи более красивого кода в новый файл
@@ -41,7 +44,7 @@ int format(char filename[], char filenameToSave[])
     std::ofstream writeFile;
     writeFile.open(filenameToSave);
 
-    // далее идет обработка массива с исходным кодом по правилам форматтирования кода
+    // далее идет обработка массива с исходным кодом по правилам форматирования кода
 
     int nestingLevel = 0; //Уровень вложенности
     char previousChar = '\0';
@@ -80,7 +83,7 @@ int format(char filename[], char filenameToSave[])
         previousChar = '\n';
         nestingLevel--;
       }
-      // Далее идут уословия при которых символ не записывается в новый файл, то есть игнорируются
+      // Далее идут условия при которых символ не записывается в новый файл, то есть игнорируются
       else if ((previousChar == ' ') && (codeHandlingArray[i] == ' ')) //удаление лишних пробелов
       {
         // do nothing
@@ -110,10 +113,5 @@ int format(char filename[], char filenameToSave[])
       }
     }
   }
-  // std::cout << std::endl
-  //           << "File \""
-  //           << filename
-  //           << "\" is succesfully formatted!"
-  //           << std::endl;
   return 0;
 }
