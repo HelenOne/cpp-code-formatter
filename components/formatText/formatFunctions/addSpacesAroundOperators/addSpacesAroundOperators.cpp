@@ -1,187 +1,119 @@
 #include "../addMoreSpaceTo/addMoreSpaceTo.h"
 #include "../deleteExtraSpace/deleteExtraSpace.h"
+#include "../../../../String.h"
 
-void addSpacesAroundOperators(char codeHandlingArray[], int *codeLength)
+String addSpacesAroundOperators(String codeHandling)
 {
-  char *buffer = new char[*codeLength]; // буфер для форматирования
+  String result = "";
   int nowChar = 0;
-  int bufferLength = *codeLength;
 
   bool commentModeSingle = false; // Режим комментария, чтобы не учитывать закомментированные символы
   bool commentModeMulty = false;  // Режим многострочного, блочного комментария
 
-  for (int i = 0; i < *codeLength; i++)
+  for (int i = 0; i < codeHandling.length(); i++)
   {
 
     if (commentModeSingle)
     {
-      if ((codeHandlingArray[i] == '\n'))
+      if ((codeHandling[i] == '\n'))
       {
         commentModeSingle = false;
-        addMoreSpaceTo(&*buffer, &bufferLength, 1); // увеличиваем размер буфера
-        buffer[nowChar] = '\n';
-        nowChar++;
+        result += "\n";
       }
     }
     else if (commentModeMulty)
     {
-      if ((codeHandlingArray[i + 1] == '/') && (codeHandlingArray[i] == '*'))
+      if ((codeHandling[i + 1] == '/') && (codeHandling[i] == '*'))
       {
         commentModeMulty = false;
-        addMoreSpaceTo(&*buffer, &bufferLength, 2); // увеличиваем размер буфера
-        buffer[nowChar] = '*';
-        nowChar++;
-        buffer[nowChar] = '/';
-        nowChar++;
+        result += "*";
+        result += "/";
       }
     }
     else // обрабатываем символы только если не режим комментария
     {
-      if (codeHandlingArray[i] == '/')
+      if (codeHandling[i] == '/')
       {
-        if ((codeHandlingArray[i + 1] == '/'))
+        if ((codeHandling[i + 1] == '/'))
         {
           commentModeSingle = true;
-          addMoreSpaceTo(&*buffer, &bufferLength, 3); // увеличиваем размер буфера
-          buffer[nowChar] = ' ';                      // ЭТО ТОЛЬКО НЕ ПОСЛЕ ПЕРЕНОСА СТРОКИ
-          nowChar++;
-          buffer[nowChar] = '/';
-          nowChar++;
-          buffer[nowChar] = '/';
-          nowChar++;
+          if (result[result.length() - 1] == '\n')
+          {
+            result += " //";
+          }
+          else
+          {
+            result += "//";
+          }
         }
-        else if ((codeHandlingArray[i + 1] == '*'))
+        else if ((codeHandling[i + 1] == '*'))
         {
           commentModeMulty = true;
-          addMoreSpaceTo(&*buffer, &bufferLength, 3); // увеличиваем размер буфера
-          buffer[nowChar] = ' ';
-          nowChar++;
-          buffer[nowChar] = '/';
-          nowChar++;
-          buffer[nowChar] = '*';
-          nowChar++;
+          if (result[result.length() - 1] == '\n')
+          {
+            result += "/*";
+          }
+          else
+          {
+            result += " /*";
+          }
         }
         else
         {
-          addMoreSpaceTo(&*buffer, &bufferLength, 3); // увеличиваем размер буфера
-          buffer[nowChar] = ' ';
-          nowChar++;
-          buffer[nowChar] = '/';
-          nowChar++;
-          buffer[nowChar] = ' ';
-          nowChar++;
+          result += " / ";
         }
       }
-      else if (codeHandlingArray[i] == '=')
+      else if (codeHandling[i] == '=')
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '=';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " = ";
       }
-      else if ((codeHandlingArray[i] == '=') && (codeHandlingArray[i + 1] == '='))
+      else if ((codeHandling[i] == '=') && (codeHandling[i + 1] == '='))
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '=';
-        nowChar++;
-        buffer[nowChar] = '=';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " == ";
+        i++;
       }
-      else if ((codeHandlingArray[i] == '+') && (codeHandlingArray[i + 1] != '+')) //если не инкрементирование
+      else if ((codeHandling[i] == '+') && (codeHandling[i + 1] != '+')) //если не инкрементирование
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '+';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " + ";
       }
-      else if ((codeHandlingArray[i] == '-') && (codeHandlingArray[i + 1] != '-')) // если не декрементирование
+      else if ((codeHandling[i] == '-') && (codeHandling[i + 1] != '-')) // если не декрементирование
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '-';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " - ";
       }
-      else if (codeHandlingArray[i] == '*')
+      else if (codeHandling[i] == '*')
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '*';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " * ";
       }
-      else if ((codeHandlingArray[i] == '/'))
+      else if ((codeHandling[i] == '/'))
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '/';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " / ";
       }
-      else if ((codeHandlingArray[i] == '<') && (codeHandlingArray[i + 1] == '<'))
+      else if ((codeHandling[i] == '<') && (codeHandling[i + 1] == '<'))
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '<';
-        nowChar++;
-        buffer[nowChar] = '<';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " << ";
+        i++;
       }
-      else if ((codeHandlingArray[i] == '>') && (codeHandlingArray[i + 1] == '>'))
+      else if ((codeHandling[i] == '>') && (codeHandling[i + 1] == '>'))
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '>';
-        nowChar++;
-        buffer[nowChar] = '>';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " >> ";
+        i++;
       }
-      else if ((codeHandlingArray[i] == '%'))
+      else if ((codeHandling[i] == '%'))
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '%';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " % ";
       }
-      else if ((codeHandlingArray[i] == '!') && (codeHandlingArray[i + 1] == '='))
+      else if ((codeHandling[i] == '!') && (codeHandling[i + 1] == '='))
       {
-        buffer[nowChar] = ' ';
-        nowChar++;
-        buffer[nowChar] = '!';
-        nowChar++;
-        buffer[nowChar] = '=';
-        nowChar++;
-        buffer[nowChar] = ' ';
-        nowChar++;
+        result += " != ";
+        i++;
+      }
+      else
+      {
+        char buffer[1];
+        buffer[0] = codeHandling[i];
+        result += buffer;
       }
     }
   }
-  if (*codeLength < bufferLength)
-  {
-    int difference = bufferLength - *codeLength;
-    addMoreSpaceTo(&*codeHandlingArray, &*codeLength, difference);
-  }
-  else if (*codeLength > bufferLength)
-  {
-    int difference = *codeLength - bufferLength;
-    deleteExtraSpace(&*codeHandlingArray, &*codeLength, difference);
-  }
-  strcpy(&*codeHandlingArray, buffer);
-  delete buffer;
+  return result;
 }

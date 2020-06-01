@@ -1,7 +1,8 @@
 #ifndef addSpacesAroundOperators_h
 #define addSpacesAroundOperators_h
 #include "./addSpacesAroundOperators.cpp"
+#include "../../../../String.h"
 
-void addSpacesAroundOperators(char codeHandlingArray[], int *codeLength);
+String addSpacesAroundOperators(String codeHandling);
 
 #endif

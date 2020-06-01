@@ -1,6 +1,8 @@
 #include "./formatFunctions/addSpacesAroundOperators/addSpacesAroundOperators.h"
+#include "../../String.h"
 
-void formatText(char codeHandlingArray[], int *codeLength)
+String formatText(String codeHandling)
 {
-  addSpacesAroundOperators(codeHandlingArray, codeLength);
+  codeHandling = addSpacesAroundOperators(codeHandling);
+  return codeHandling;
 }

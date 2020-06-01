@@ -74,6 +74,7 @@ String::String(const char *p)
   for (; j < i; j++)
   {
     buffer[j] = *t;
+    t++;
   }
 
   size = j;
@@ -134,6 +135,7 @@ void String::operator=(const char *p)
   for (; j < i; j++)
   {
     buffer[j] = *t;
+    t++;
   }
   size = j;
 }

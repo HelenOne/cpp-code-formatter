@@ -1,7 +1,8 @@
 #ifndef formatText_h
 #define formatText_h
 #include "./formatText.cpp"
+#include "../../String.h"
 
-void formatText(char codeHandlingArray[], int *codeLength);
+String formatText(String codeHandling);
 
 #endif

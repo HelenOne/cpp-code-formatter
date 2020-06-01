@@ -2,7 +2,7 @@
 // Громова
 // "C++ code formatter"
 
-// #include "./components/GUI/GUI.h"
+#include "./components/GUI/GUI.h"
 #include "./String.h"
 
 #include <stdlib.h>
@@ -10,17 +10,11 @@
 #include <iostream>
 #include <fstream>
 #include <Windows.h>
+#include <cassert>
 
 int main()
 {
-    // GUI();
-
-    String firstStr = "123";
-    cout << firstStr;
-
-    firstStr += "2345";
-    // cout <<
-    cout << firstStr;
+    GUI();
 
     return 0;
 }
