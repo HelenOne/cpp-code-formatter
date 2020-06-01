@@ -1,7 +1,9 @@
 // 9372
 // Громова
 // "C++ code formatter"
-#include "./components/GUI/GUI.h"
+
+// #include "./components/GUI/GUI.h"
+#include "./String.h"
 
 #include <stdlib.h>
 
@@ -11,6 +13,14 @@
 
 int main()
 {
-    GUI();
+    // GUI();
+
+    String firstStr = "123";
+    cout << firstStr;
+
+    firstStr += "2345";
+    // cout <<
+    cout << firstStr;
+
     return 0;
 }

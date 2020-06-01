@@ -5,6 +5,7 @@
 
 #include "../formatText/formatText.h"
 #include "../formatText/formatFunctions/addMoreSpaceTo/addMoreSpaceTo.h"
+#include "../../String.h"
 
 void format(char filename[], char filenameToSave[])
 {
@@ -16,72 +17,80 @@ void format(char filename[], char filenameToSave[])
   readFile.open(filename);
   if (!readFile.is_open())
   {
-    std::wcout << L"Не удалось открыть файл ("
-               << filename
-               << L")! \n";
+    std::wcout << L"Не удалось открыть файл (";
+    std::cout << filename
+              << ")! \n";
   }
 
-  std::wcout << L"Функция format.cpp запущена \n";
+  String codeHandling = "";
+  // String s;
 
-  int codeLength = 0;
-  int maxStringLength = 100000;
-
-  char *codeHandlingArray = new char[codeLength]; //Сюда записываю код, чтобы обработать и записать отформатированный код в новый файл
-  char currentRowInReadFile[maxStringLength];     // массив для получения отдельных строк из исходного файла
-
-  int codeHandlingArrayChar = 0;
-
-  int codeRowNumber = 0; // номер обраатываемой строки
-
-  // цикл для записи исходного кода в массив символов codeHandlingArray
   while (!readFile.eof())
   {
-    // std::wcout << L"Цикл while (!readFile.eof()) \n";
-    readFile.getline(currentRowInReadFile, maxStringLength, '\0');
-    codeRowNumber++;
-
-    int currentChar = 0;
-
-    while (currentRowInReadFile[currentChar] != '\0')
-    {
-      // std::wcout << L"Цикл while (currentRowInReadFile[currentChar]) \n";
-      // std::cout << codeLength << std::endl;
-      addMoreSpaceTo(codeHandlingArray, &codeLength, 1);
-
-      // std::cout << codeLength << std::endl;
-
-      codeHandlingArray[codeHandlingArrayChar] = currentRowInReadFile[currentChar];
-      // std::cout << codeHandlingArray[codeHandlingArrayChar] << std::endl;
-
-      currentChar++;
-      codeHandlingArrayChar++;
-      // codeLength++;
-      if (currentRowInReadFile[currentChar] == '\0')
-      {
-        std::wcout << L"Строка " << codeRowNumber << L" успешно обработана \n";
-      }
-    }
-
-    std::cout << "Debug" << std::endl;
-
-    if (readFile.eof())
-    {
-      std::wcout << L"Файл успешно обработан \n";
-    }
+    char buffer;
+    readFile.get(buffer);
+    char bufferArr[2] = {buffer, '\0'};
+    std::cout << bufferArr;
+    codeHandling += bufferArr;
   }
+  std::cout << "pushing completed\n";
 
-  // std::wcout << L"Цикл завершен";
+  std::cout << codeHandling;
+  // int codeLength = 0;
+  // int maxStringLength = 100000;
 
-  readFile.close(); // программа прочитала исходный файл, сохранила его в массив, закрыла поток
+  // char *codeHandlingArray = new char[codeLength]; //Сюда записываю код, чтобы обработать и записать отформатированный код в новый файл
+  // char currentRowInReadFile[maxStringLength];     // массив для получения отдельных строк из исходного файла
 
-  // здесь маcсив форматируется
-  formatText(codeHandlingArray, &codeLength);
+  // int codeHandlingArrayChar = 0;
 
-  std::ofstream writeFile; // поток для записи в новый файл обработанного массива
-  writeFile.open(filenameToSave);
+  // int codeRowNumber = 0; // номер обрабатываемой строки
 
-  for (int i = 0; i < codeLength; i++)
-  {
-    writeFile << codeHandlingArray[i];
-  }
+  // // цикл для записи исходного кода в массив символов codeHandlingArray
+  // while (!readFile.eof())
+  // {
+  //   // std::cout << "Debug" << std::endl;
+
+  //   readFile.getline(currentRowInReadFile, maxStringLength, '\0');
+
+  //   int currentChar = 0;
+  //   while (currentRowInReadFile[currentChar] != '\0')
+  //   {
+
+  //     addMoreSpaceTo(codeHandlingArray, &codeLength, 1);
+  //     if (codeHandlingArray[codeHandlingArrayChar])
+  //     {
+  //       codeHandlingArray[codeHandlingArrayChar] = currentRowInReadFile[currentChar];
+  //       currentChar++;
+  //       codeHandlingArrayChar++;
+  //     }
+  //     else
+  //     {
+  //       std::wcout << L"Ошибка! Элемент не найден";
+  //     }
+  //   }
+
+  //   if (readFile.eof())
+  //   {
+  //     std::wcout << L"Файл успешно обработан \n";
+  //   }
+  // }
+  // for (int i = 0; i < codeLength; i++)
+  // {
+  //   std::cout << codeHandlingArray[i];
+  // }
+
+  // readFile.close(); // программа прочитала исходный файл, сохранила его в массив, закрыла поток
+
+  // // здесь маcсив форматируется
+
+  // formatText(codeHandlingArray, &codeLength);
+
+  // std::ofstream writeFile; // поток для записи в новый файл обработанного массива
+  // writeFile.open(filenameToSave);
+
+  // for (int i = 0; i < codeLength; i++)
+  // {
+  //   writeFile << codeHandlingArray[i];
+  // }
 }
