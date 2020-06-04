@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 #include "../formatText/formatText.h"
-#include "../formatText/formatFunctions/addMoreSpaceTo/addMoreSpaceTo.h"
 #include "../../String.h"
 
 void format(char filename[], char filenameToSave[])
@@ -15,12 +14,12 @@ void format(char filename[], char filenameToSave[])
   // создание потока для чтения файла и открытие файла для дальнейшего форматирования
   std::ifstream readFile;
   readFile.open(filename);
-  // if (!readFile.is_open())
-  // {
-  //   std::wcout << L"Не удалось открыть файл (";
-  //   std::cout << filename
-  //             << ")! \n";
-  // }
+  if (!readFile.is_open())
+  {
+    std::wcout << L"Не удалось открыть файл (";
+    std::cout << filename
+              << ")! \n";
+  }
 
   String codeHandling = ""; // строка в которую копируется файл
 
@@ -32,9 +31,9 @@ void format(char filename[], char filenameToSave[])
     codeHandling += bufferArr;
   }
 
-  readFile.close(); // программа прочитала исходный файл, сохранила его в массив, закрыла поток
+  readFile.close(); // программа прочитала исходный файл, сохранила его в строку, закрыла поток
 
-  // // здесь маcсив форматируется
+  // // здесь строка форматируется
   String resultString = formatText(codeHandling);
 
   std::ofstream writeFile; // поток для записи в новый файл отформатированного кода
@@ -44,4 +43,5 @@ void format(char filename[], char filenameToSave[])
   {
     writeFile << resultString[i];
   }
+  writeFile.close();
 }

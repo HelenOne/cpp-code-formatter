@@ -21,7 +21,7 @@ bool isInComment(int orderNumber, String codeHandling)
     }
     else // Если мы в комментарии
     {
-      if (commentModeSingle && codeHandling[i] == '\n')
+      if (commentModeSingle && codeHandling[i + 1] == '\n')
       {
         commentModeSingle = false;
       }

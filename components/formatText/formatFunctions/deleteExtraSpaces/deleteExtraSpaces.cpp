@@ -1,4 +1,6 @@
 #include "../../../../String.h"
+#include "../isInComment/isInComment.h"
+#include "../isInString/isInString.h"
 
 String deleteExtraSpaces(String codeHandlingString)
 {
@@ -8,47 +10,52 @@ String deleteExtraSpaces(String codeHandlingString)
   int wrapsNumber = 0;
   for (int i = 0; i < codeHandlingString.length(); i++)
   {
-    // не забыть учесть режим комментария и строки!!!
-    //Убрать все пробелы после переноса и до переноса!!!
-    if (wrapsNumber == 2)
+    if (isInComment(i, codeHandlingString) || isInString(i, codeHandlingString))
     {
-      thereIsTwoWrapsAlready = true;
+      char buffer[2] = {codeHandlingString[i], '\0'};
+      result += buffer;
     }
-    if (((codeHandlingString[i] == ' ') || (codeHandlingString[i] == '\t')) && (!thereIsOneSpaceAlredy))
+    else
     {
-      if ((codeHandlingString[i - 1] != '\n') && (codeHandlingString[i + 1] != '\n')) // Не учитывать все пробелы после переноса и до переноса
+      if (wrapsNumber == 2)
+      {
+        thereIsTwoWrapsAlready = true;
+      }
+      if (((codeHandlingString[i] == ' ') || (codeHandlingString[i] == '\t')) && ((thereIsOneSpaceAlredy) || (codeHandlingString[i - 1] == '\n') || (codeHandlingString[i + 1] == '\n') || (codeHandlingString[i - 1] == ' ')))
+      {
+        // ignore symbols
+      }
+      else if (((codeHandlingString[i] == ' ') || (codeHandlingString[i] == '\t')) && (!thereIsOneSpaceAlredy))
       {
         result += " ";
         thereIsOneSpaceAlredy = true;
       }
-    }
-    else if ((codeHandlingString[i] == ' ') || (codeHandlingString[i] == '\t') && ((thereIsOneSpaceAlredy) || (codeHandlingString[i - 1] != '\n') || (codeHandlingString[i + 1] != '\n')))
-    {
-      // ignore symbols
-    }
-    else if ((codeHandlingString[i] == '\n') && (!thereIsTwoWrapsAlready))
-    {
-      result += "\n";
-      wrapsNumber++;
-    }
-    else if ((codeHandlingString[i] == '\n') && (thereIsTwoWrapsAlready))
-    {
-      // ignore symbols
-    }
-    else
-    {
-      if (thereIsOneSpaceAlredy)
+
+      else if ((codeHandlingString[i] == '\n') && (!thereIsTwoWrapsAlready))
       {
-        thereIsOneSpaceAlredy = false;
+        result += "\n";
+        wrapsNumber++;
       }
-      if ((thereIsTwoWrapsAlready))
+      else if ((codeHandlingString[i] == '\n') && (thereIsTwoWrapsAlready))
       {
-        wrapsNumber = 0;
-        thereIsTwoWrapsAlready = false;
+        // ignore symbols
       }
-      char buffer[2] = {codeHandlingString[i], '\0'};
-      result += buffer;
+      else
+      {
+        if (thereIsOneSpaceAlredy)
+        {
+          thereIsOneSpaceAlredy = false;
+        }
+        if ((thereIsTwoWrapsAlready))
+        {
+          wrapsNumber = 0;
+          thereIsTwoWrapsAlready = false;
+        }
+        char buffer[2] = {codeHandlingString[i], '\0'};
+        result += buffer;
+      }
     }
   }
+
   return result;
 }
