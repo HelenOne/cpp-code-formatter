@@ -10,17 +10,14 @@ String addSpacesAroundOperators(String codeHandling)
 
   for (int i = 0; i < codeHandling.length(); i++)
   {
-    // cout << "I am working! \n";
+    if (isInComment(i, codeHandling))
+    // Проверка, что сейчас в комментарии
+    {
+      char buffer[2] = {codeHandling[i], '\0'};
 
-    // if
-    // bool isComment = (isInComment(i, codeHandling)); // Проверка, что сейчас в комментарии
-    // cout << isComment << "\n";
-    // {
-    // char buffer[1] = {codeHandling[i]};
-    // result += "ХУЙ";
-    // result += buffer;
-    // }
-    // else // обрабатываем символы только если не режим комментария
+      result += buffer;
+    }
+    else // обрабатываем символы только если не режим комментария
     {
 
       if ((codeHandling[i] == '=') && (codeHandling[i - 1] != '=') && (codeHandling[i + 1] != '=') && (codeHandling[i - 1] != '!') && (codeHandling[i - 1] != '-') && (codeHandling[i - 1] != '+'))
@@ -73,13 +70,10 @@ String addSpacesAroundOperators(String codeHandling)
         result += " -= ";
         i++;
       }
-      else if (codeHandling[i] == ';')
-      {
-        result += "; ";
-      }
+
       else
       {
-        char buffer[1] = {codeHandling[i]};
+        char buffer[2] = {codeHandling[i], '\0'};
         result += buffer;
       }
     }
